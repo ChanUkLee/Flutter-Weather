@@ -11,7 +11,7 @@ import 'package:flutter_weather/src/widgets/weather_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:permission_handler/permission_handler.dart' as permission;
 
 enum OptionsMenu { changeCity, settings }
 
@@ -90,8 +90,8 @@ class _WeatherScreenState extends State<WeatherScreen>
                 color: AppStateContainer.of(context).theme.primaryColor),
             child: FadeTransition(
               opacity: _fadeAnimation,
-              child: BlocBuilder(
-                  bloc: _weatherBloc,
+              child: BlocBuilder<WeatherBloc, WeatherState>(
+                  cubit: _weatherBloc,
                   builder: (_, WeatherState weatherState) {
                     if (weatherState is WeatherLoaded) {
                       this._cityName = weatherState.weather.cityName;
@@ -214,29 +214,36 @@ class _WeatherScreenState extends State<WeatherScreen>
   }
 
   _fetchWeatherWithCity() {
-    _weatherBloc.dispatch(FetchWeather(cityName: _cityName));
+    _weatherBloc.add(FetchWeather(cityName: _cityName));
   }
 
   _fetchWeatherWithLocation() async {
-    var permissionHandler = PermissionHandler();
-    var permissionResult = await permissionHandler
-        .requestPermissions([PermissionGroup.locationWhenInUse]);
+    var permissionStatus = await permission.Permission.locationWhenInUse.request();
 
-    switch (permissionResult[PermissionGroup.locationWhenInUse]) {
-      case PermissionStatus.denied:
-      case PermissionStatus.unknown:
+    switch (permissionStatus) {
+      case permission.PermissionStatus.granted:
+      case permission.PermissionStatus.limited:
+        break;
+      default:
         print('location permission denied');
-        _showLocationDeniedDialog(permissionHandler);
+        _showLocationDeniedDialog();
         throw Error();
     }
 
-    Position position = await Geolocator()
+    var serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      print('location service disabled');
+      _showLocationDeniedDialog();
+      throw Error();
+    }
+
+    Position position = await Geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
-    _weatherBloc.dispatch(FetchWeather(
+    _weatherBloc.add(FetchWeather(
         longitude: position.longitude, latitude: position.latitude));
   }
 
-  void _showLocationDeniedDialog(PermissionHandler permissionHandler) {
+  void _showLocationDeniedDialog() {
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -252,7 +259,7 @@ class _WeatherScreenState extends State<WeatherScreen>
                   style: TextStyle(color: Colors.green, fontSize: 16),
                 ),
                 onPressed: () {
-                  permissionHandler.openAppSettings();
+                  permission.openAppSettings();
                   Navigator.of(context).pop();
                 },
               ),

@@ -11,9 +11,8 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final WeatherRepository weatherRepository;
 
   WeatherBloc({@required this.weatherRepository})
-      : assert(weatherRepository != null);
+      : assert(weatherRepository != null), super(WeatherEmpty());
 
-  @override
   WeatherState get initialState {
     return WeatherEmpty();
   }

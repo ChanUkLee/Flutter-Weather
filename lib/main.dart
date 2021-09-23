@@ -10,14 +10,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main() {
-  BlocSupervisor().delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocDelegate();
   runApp(AppStateContainer(child: WeatherApp()));
 }
 
-
-// Coded By Raj Chowdhury
-
-class SimpleBlocDelegate extends BlocDelegate {
+class SimpleBlocDelegate extends BlocObserver {
   @override
   onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
@@ -56,8 +53,7 @@ class AppStateContainer extends StatefulWidget {
   _AppStateContainerState createState() => _AppStateContainerState();
 
   static _AppStateContainerState of(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(_InheritedStateContainer)
-            as _InheritedStateContainer)
+    return (context.dependOnInheritedWidgetOfExactType<_InheritedStateContainer>())
         .data;
   }
 }

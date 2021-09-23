@@ -3,12 +3,18 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class WeatherState extends Equatable {
-  WeatherState([List props = const []]) : super(props);
+  WeatherState([List props = const []]);
 }
 
-class WeatherEmpty extends WeatherState {}
+class WeatherEmpty extends WeatherState {
+  @override
+  List<Object> get props => [];
+}
 
-class WeatherLoading extends WeatherState {}
+class WeatherLoading extends WeatherState {
+  @override
+  List<Object> get props => [];
+}
 
 class WeatherLoaded extends WeatherState {
   final Weather weather;
@@ -16,6 +22,9 @@ class WeatherLoaded extends WeatherState {
   WeatherLoaded({@required this.weather})
       : assert(weather != null),
         super([weather]);
+
+  @override
+  List<Object> get props => [weather];
 }
 
 class WeatherError extends WeatherState {
@@ -24,4 +33,7 @@ class WeatherError extends WeatherState {
   WeatherError({@required this.errorCode})
       : assert(errorCode != null),
         super([errorCode]);
+
+  @override
+  List<Object> get props => [errorCode];
 }
