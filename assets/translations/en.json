@@ -1,0 +1,9 @@
+{
+  "app_title": "Flutter Weather App",
+  "humidity": "humidity",
+  "sunset": "sunset",
+  "sunrise": "sunrise",
+  "wind speed": "wind speed",
+  "max": "max",
+  "min": "min"
+}
