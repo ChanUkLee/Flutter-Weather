@@ -5,6 +5,7 @@ import 'package:flutter_weather/src/widgets/forecast_horizontal_widget.dart';
 import 'package:flutter_weather/src/widgets/value_tile.dart';
 import 'package:flutter_weather/src/widgets/weather_swipe_pager.dart';
 import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class WeatherWidget extends StatelessWidget {
   final Weather weather;
@@ -53,7 +54,7 @@ class WeatherWidget extends StatelessWidget {
             padding: EdgeInsets.all(10),
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            ValueTile("wind speed", '${this.weather.windSpeed} m/s'),
+            ValueTile("wind speed".tr(), '${this.weather.windSpeed} m/s'),
             Padding(
               padding: const EdgeInsets.only(left: 15, right: 15),
               child: Center(
@@ -67,7 +68,7 @@ class WeatherWidget extends StatelessWidget {
               )),
             ),
             ValueTile(
-                "sunrise",
+                "sunrise".tr(),
                 DateFormat('h:m a').format(DateTime.fromMillisecondsSinceEpoch(
                     this.weather.sunrise * 1000))),
             Padding(
@@ -83,7 +84,7 @@ class WeatherWidget extends StatelessWidget {
               )),
             ),
             ValueTile(
-                "sunset",
+                "sunset".tr(),
                 DateFormat('h:m a').format(DateTime.fromMillisecondsSinceEpoch(
                     this.weather.sunset * 1000))),
             Padding(
@@ -98,7 +99,7 @@ class WeatherWidget extends StatelessWidget {
                     .withAlpha(50),
               )),
             ),
-            ValueTile("humidity", '${this.weather.humidity}%'),
+            ValueTile("humidity".tr(), '${this.weather.humidity}%'),
           ]),
         ],
       ),

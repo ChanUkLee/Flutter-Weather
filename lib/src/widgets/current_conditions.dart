@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/main.dart';
 import 'package:flutter_weather/src/model/weather.dart';
 import 'package:flutter_weather/src/widgets/value_tile.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Renders Weather Icon, current, min and max temperatures
 class CurrentConditions extends StatelessWidget {
@@ -29,7 +30,7 @@ class CurrentConditions extends StatelessWidget {
               color: AppStateContainer.of(context).theme.accentColor),
         ),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-          ValueTile("max",
+          ValueTile("max".tr(),
               '${this.weather.maxTemperature.as(AppStateContainer.of(context).temperatureUnit).round()}°'),
           Padding(
             padding: const EdgeInsets.only(left: 15, right: 15),
@@ -41,7 +42,7 @@ class CurrentConditions extends StatelessWidget {
                   AppStateContainer.of(context).theme.accentColor.withAlpha(50),
             )),
           ),
-          ValueTile("min",
+          ValueTile("min".tr(),
               '${this.weather.minTemperature.as(AppStateContainer.of(context).temperatureUnit).round()}°'),
         ]),
       ],

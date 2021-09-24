@@ -8,10 +8,21 @@ import 'package:flutter_weather/src/utils/constants.dart';
 import 'package:flutter_weather/src/utils/converters.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-void main() {
+void main() async {
   Bloc.observer = SimpleBlocDelegate();
-  runApp(AppStateContainer(child: WeatherApp()));
+  //runApp(AppStateContainer(child: WeatherApp()));
+  runApp(
+    EasyLocalization(
+        supportedLocales: [Locale('en'), Locale('ko')],
+        path: 'assets/translations', // <-- change patch to your
+        fallbackLocale: Locale('ko'),
+        //child: WeatherApp()
+        child: AppStateContainer(child: WeatherApp())
+    )
+  );
 }
 
 class SimpleBlocDelegate extends BlocObserver {
@@ -27,7 +38,10 @@ class WeatherApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Weather App',
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      title: 'Flutter Weather App'.tr(),
       debugShowCheckedModeBanner: false,
       theme: AppStateContainer.of(context).theme,
       home: WeatherScreen(),
