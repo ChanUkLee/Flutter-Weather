@@ -15,7 +15,9 @@ class ValueTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
+        child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
@@ -45,6 +47,7 @@ class ValueTile extends StatelessWidget {
               TextStyle(color: AppStateContainer.of(context).theme.accentColor),
         ),
       ],
+    )
     );
   }
 }
